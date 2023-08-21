@@ -1,9 +1,11 @@
 ## 1D Heat Transfer In Aluminum Beam
 
 The state, ie: temperature at some position $\mathbf{x}$ at some time $t$.
+
 $$ u(\mathbf{x},t) $$ 
 
 The state derivative is the heat equation:
+
 $$\frac{\partial u}{\partial t} = \alpha \nabla^2 u $$
 
 where
@@ -24,11 +26,11 @@ $$ \therefore \frac{\partial u}{\partial t} = \alpha \left( \frac{u_{i+1}^m - 2u
 
 The inital condition and boundary conditions are defined as follows:
 
-$ u(x,0) = 273.15 K $ for $ 0 \lt x \lt L $, where L is the total length of the rod
+IC: $ u(x,0) = 273.15 K $ for $ 0 \lt x \lt L $, where L is the total length of the rod
 
-$ u(0, t) = 500 K $ for all t
+BC1: $ u(0, t) = 500 K $ for all t
 
-$ u(L, t) = 500 K $ for all t
+BC2: $ u(L, t) = 500 K $ for all t
 
 The state derivative can be expressed in matrix form:
 
