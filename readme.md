@@ -1,7 +1,7 @@
 ## 1D Heat Transfer In Aluminum Beam
 
-The state, ie: temperature at some position $\bold{x}$ at some time $t$.
-$$ u(\bold{x},t) $$ 
+The state, ie: temperature at some position $\mathbf{x}$ at some time $t$.
+$$ u(\mathbf{x},t) $$ 
 
 The state derivative is the heat equation:
 $$\frac{\partial u}{\partial t} = \alpha \nabla^2 u $$
@@ -28,7 +28,7 @@ $ u(L, t) = 500 K $ for all t
 The state derivative can be expressed in matrix form:
 
 ```math
-\therefore \frac{\partial \bold{u}}{\partial t} = \frac{\alpha}{\Delta x^2}
+\therefore \frac{\partial \mathbf{u}}{\partial t} = \frac{\alpha}{\Delta x^2}
 
 \begin{bmatrix}
 -2 & 1 & 0 & \dots & 0\\
