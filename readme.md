@@ -1,7 +1,9 @@
 The state, ie: temperature at some position $\mathbf{x}$ at some time $t$.
+
 $$ u(\mathbf{x},t) $$ 
 
 The state derivative is the heat equation:
+
 $$\frac{\partial u}{\partial t} = \alpha \nabla^2 u $$
 
 where
@@ -13,6 +15,7 @@ $\alpha$ = thermal diffusivity
 $t$ = time
 
 Only considering 1-dimension:
+
 $$ \nabla^2 u = \frac{\partial^2 u}{\partial x^2} = \frac{u_{i+1}^m - 2u_i^m + u_{i-1}^m}{\Delta x^2}$$
 
 where $m$ represents a given time, and $i$ represents spatial discretization. All together:
@@ -35,10 +38,8 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pl
-```
+from matplotlib.collections import LineCollection
 
-
-```python
 def dudt(t, u, *args): # heat equation
     alpha = args[0]
     dx = args[1]
@@ -88,37 +89,46 @@ $$
 
 
 ```python
-A = (np.diag(np.ones(n_space-1), k=1) + np.diag(-2*np.ones(n_space)) + np.diag(1*np.ones(n_space-1), k=-1))
-res = sp.integrate.solve_ivp(dudt, (t0, tf), u, args=(alpha, dx, A))
-t = res.t
-y = res.y
+A = (np.diag(np.ones(n_space-1), k=1) + np.diag(-2*np.ones(n_space)) + np.diag(1*np.ones(n_space-1), k=-1)) # Spatial Matrix
+res = sp.integrate.solve_ivp(dudt, (t0, tf), u, args=(alpha, dx, A)) # Default method is RK45
+t = res.t # time array
+y = res.y.transpose() # each row represents a given time step, each column represents the temperature at a given beam section
 ```
+
+## Plotting
 
 
 ```python
 fig, ax = plt.subplots(1,1, figsize=(8,4))
 
-colors = pl.cm.jet(np.linspace(0.7,1,len(t)))
+# The following creates a list of shape [time, array([x distances, temperatures])]
+segs = []
+for count, element in enumerate(y):
+    if count % 400 == 0: # include only every 400th timestep
+        segs.append(np.column_stack([x, element]))
 
-for i in range(len(t)):
-    if i % 200 == 0:
-        ax.plot(x, y.T[i, :], color=colors[i])
-plt.show()
+# Creates a collection of lines for each time, "array" arg used to scale colorbar from t0 to tf
+lines = LineCollection(segs, array=np.arange(t0, len(segs))/len(segs)*tf/60) 
+ax.add_collection(lines)
+
+# Formatting
+axcb = fig.colorbar(lines)
+ax.set_xlim(np.min(x), np.max(x))
+ax.set_ylim(250, 550)
+axcb.set_label("Time [min]")
 ax.set_ylabel("Temperature [K]")
 ax.set_xlabel("Length of Beam [m]")
 ax.set_title("Heating of Aluminum Beam")
-
+plt.show()
 ```
 
 
     
-![png](output_7_0.png)
+![png](readme_files/readme_7_0.png)
     
 
 
 
+```python
 
-
-    Text(0.5, 1.0, 'Heating of Aluminum Beam')
-
-
+```
